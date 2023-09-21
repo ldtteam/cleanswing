@@ -21,25 +21,31 @@ public class CleanSwing
     @SubscribeEvent
     public static void onBlock(final PlayerInteractEvent.LeftClickBlock event)
     {
-        if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty())
+        if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty() && event.getEntity() != null)
         {
             final List<Entity> entities = event.getLevel().getEntities(null, new AABB(event.getPos()).expandTowards(event.getEntity().getLookAngle()));
             if (!entities.isEmpty())
             {
-                if (event.getItemStack().canPerformAction(ToolActions.SWORD_SWEEP))
+                boolean foundEntity = false;
+                final boolean sweepin = event.getItemStack().canPerformAction(ToolActions.SWORD_SWEEP);
+                for (final Entity entity : entities)
                 {
-                    for (final Entity entity : entities)
+                    if (entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
                     {
                         event.getEntity().attack(entity);
+                        foundEntity = true;
+                        if (!sweepin)
+                        {
+                            break;
+                        }
                     }
                 }
-                else
-                {
-                    event.getEntity().attack(entities.get(0));
-                }
 
-                event.setCanceled(true);
-                event.getEntity().swing(InteractionHand.MAIN_HAND);
+                if (foundEntity)
+                {
+                    event.setCanceled(true);
+                    event.getEntity().swing(InteractionHand.MAIN_HAND);
+                }
             }
         }
     }
