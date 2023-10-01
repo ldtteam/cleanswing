@@ -1,5 +1,6 @@
 package com.ldtteam.cleanswing;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
@@ -32,7 +33,10 @@ public class CleanSwing
                 {
                     if (entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
                     {
-                        event.getEntity().attack(entity);
+                        if (event.getLevel().isClientSide)
+                        {
+                            Minecraft.getInstance().gameMode.attack(event.getEntity(), entity);
+                        }
                         foundEntity = true;
                         if (!sweepin)
                         {
