@@ -3,6 +3,7 @@ package com.ldtteam.cleanswing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -31,7 +32,7 @@ public class CleanSwing
                 final boolean sweepin = event.getItemStack().canPerformAction(ToolActions.SWORD_SWEEP);
                 for (final Entity entity : entities)
                 {
-                    if (entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
+                    if (entity instanceof LivingEntity && entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
                     {
                         if (event.getLevel().isClientSide)
                         {
