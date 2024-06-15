@@ -5,10 +5,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class CleanSwing
 {
     public CleanSwing()
     {
-        Mod.EventBusSubscriber.Bus.FORGE.bus().get().register(this.getClass());
+        NeoForge.EVENT_BUS.register(this.getClass());
     }
 
     @SubscribeEvent
