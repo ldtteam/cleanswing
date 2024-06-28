@@ -7,8 +7,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.ToolActions;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class CleanSwing
             if (!entities.isEmpty())
             {
                 boolean foundEntity = false;
-                final boolean sweepin = event.getItemStack().canPerformAction(ToolActions.SWORD_SWEEP);
+                final boolean sweepin = event.getItemStack().canPerformAction(ItemAbilities.SWORD_SWEEP);
                 for (final Entity entity : entities)
                 {
                     if (entity instanceof LivingEntity && entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
