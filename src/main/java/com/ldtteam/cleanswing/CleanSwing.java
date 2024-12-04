@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CleanSwing
     @SubscribeEvent
     public static void onBlock(final PlayerInteractEvent.LeftClickBlock event)
     {
-        if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty() && event.getEntity() != null)
+        if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty() && event.getEntity() != null && !(event.getEntity() instanceof FakePlayer))
         {
             final List<Entity> entities = event.getLevel().getEntities(null, new AABB(event.getPos()).expandTowards(event.getEntity().getLookAngle()));
             if (!entities.isEmpty())
