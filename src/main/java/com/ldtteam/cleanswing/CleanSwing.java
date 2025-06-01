@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -27,7 +27,13 @@ public class CleanSwing
     {
         if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty() && event.getEntity() != null && !(event.getEntity() instanceof FakePlayer))
         {
-            final List<Entity> entities = event.getLevel().getEntities(null, new AABB(event.getPos()).expandTowards(event.getEntity().getLookAngle()));
+            final VoxelShape interactionShape = event.getLevel().getBlockState(event.getPos()).getShape(event.getLevel(), event.getPos());
+            if (interactionShape.isEmpty())
+            {
+                return;
+            }
+
+            final List<Entity> entities = event.getLevel().getEntities(null, interactionShape.bounds().move(event.getPos()));
             if (!entities.isEmpty())
             {
                 boolean foundEntity = false;
