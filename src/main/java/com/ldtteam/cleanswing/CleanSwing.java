@@ -33,7 +33,7 @@ public class CleanSwing
                 return;
             }
 
-            final List<Entity> entities = event.getLevel().getEntities(null, interactionShape.bounds().move(event.getPos()));
+            final List<Entity> entities = event.getLevel().getEntities(null, interactionShape.bounds().move(event.getPos()).expandTowards(0.2,0.2,0.2).expandTowards(-0.2,-0.2,-0.2));
             if (!entities.isEmpty())
             {
                 boolean foundEntity = false;
