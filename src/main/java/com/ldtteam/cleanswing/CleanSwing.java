@@ -42,7 +42,7 @@ public class CleanSwing
                 {
                     if (entity instanceof LivingEntity && entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
                     {
-                        if (event.getLevel().isClientSide)
+                        if (event.getLevel().isClientSide())
                         {
                             Minecraft.getInstance().gameMode.attack(event.getEntity(), entity);
                         }
