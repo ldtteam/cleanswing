@@ -1,9 +1,16 @@
 package com.ldtteam.cleanswing;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -17,6 +24,8 @@ import java.util.List;
 @Mod("cleanswing")
 public class CleanSwing
 {
+    public static final TagKey<Block> ignore_block = BlockTags.create(Identifier.fromNamespaceAndPath("cleanswing", "ignore_block"));
+
     public CleanSwing()
     {
         NeoForge.EVENT_BUS.register(this.getClass());
@@ -27,7 +36,12 @@ public class CleanSwing
     {
         if (event.getLevel().getBlockState(event.getPos()).getCollisionShape(event.getLevel(), event.getPos()).isEmpty() && event.getEntity() != null && !(event.getEntity() instanceof FakePlayer))
         {
-            final VoxelShape interactionShape = event.getLevel().getBlockState(event.getPos()).getShape(event.getLevel(), event.getPos());
+            final BlockState state = event.getLevel().getBlockState(event.getPos());
+            if (state.is(ignore_block))
+            {
+                return;
+            }
+            final VoxelShape interactionShape = state.getShape(event.getLevel(), event.getPos());
             if (interactionShape.isEmpty())
             {
                 return;
@@ -40,7 +54,10 @@ public class CleanSwing
                 final boolean sweepin = event.getItemStack().canPerformAction(ItemAbilities.SWORD_SWEEP);
                 for (final Entity entity : entities)
                 {
-                    if (entity instanceof LivingEntity && entity.isAttackable() && !entity.getUUID().equals(event.getEntity().getUUID()))
+                    if (entity instanceof LivingEntity && entity.isAttackable()
+                        && !entity.getUUID().equals(event.getEntity().getUUID())
+                        && !(entity instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() == event.getEntity())
+                        && !(entity instanceof Villager))
                     {
                         if (event.getLevel().isClientSide())
                         {
